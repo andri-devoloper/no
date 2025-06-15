@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
   const signal = await req.json();
 
   const { data: configs, error: configError } = await supabase
-    .from("StrategyConfig")
+    .from("Order")
     .select("*")
     .order("id", { ascending: false })
     .limit(1);
@@ -46,20 +46,33 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const config = configs?.[0] ?? defaultConfig;
+  const configRaw = configs?.[0] ?? {};
+  const config = {
+    ...defaultConfig,
+    ...configRaw,
+    plusDI: Number(configRaw.plusDI ?? defaultConfig.plusDI),
+    minusDI: Number(configRaw.minusDI ?? defaultConfig.minusDI),
+    adx: Number(configRaw.adx ?? defaultConfig.adx),
+    takeProfit: Number(configRaw.takeProfit ?? defaultConfig.takeProfit),
+    stopLoss: Number(configRaw.stopLoss ?? defaultConfig.stopLoss),
+  };
 
   let action: "BUY" | "SELL" | null = null;
+
+  // DEBUG LOG
+  console.log("Signal received:", signal);
+  console.log("Config used:", config);
 
   if (
     signal.plusDI > config.plusDI &&
     signal.minusDI < config.minusDI &&
-    signal.adx > config.adx
+    signal.adx >= config.adx
   ) {
     action = "BUY";
   } else if (
     signal.plusDI < config.plusDI &&
     signal.minusDI > config.minusDI &&
-    signal.adx > config.adx
+    signal.adx >= config.adx
   ) {
     action = "SELL";
   }

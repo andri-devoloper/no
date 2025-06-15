@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 "use client";
 
 import {
@@ -11,9 +12,14 @@ import { styled } from "@mui/material/styles";
 
 const drawerWidth = 240;
 
+// Extend AppBar and inject custom prop `open`
+interface AppBarProps {
+  open?: boolean;
+}
+
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
-})<{ open?: boolean }>(({ theme, open }) => ({
+})<AppBarProps>(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(["margin", "width"], {
     easing: open
