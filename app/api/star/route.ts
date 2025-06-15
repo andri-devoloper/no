@@ -1,22 +1,8 @@
-import { supabase } from "@/lib/supabaseClient";
 import { NextResponse } from "next/server";
 import {
   createStrategyConfig,
   StrategyConfig,
-} from "@/models/StrategyConfigModel";
-
-export async function GET() {
-  const { data, error } = await supabase
-    .from("StrategyConfig")
-    .select("*")
-    .order("createdAt", { ascending: false });
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 }); // ✅ Pakai NextResponse di sini juga
-  }
-
-  return NextResponse.json(data);
-}
+} from "@/models/StrategyConfigModel"; // pastikan path-nya sesuai
 
 export async function POST(request: Request) {
   try {
