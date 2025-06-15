@@ -1,11 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
-
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseClient";
 import { createOrder } from "@/models/OrderModel";
 import { getCurrentPrice } from "@/lib/binanceService";
 
-// Default strategy config (fallback)
 const defaultConfig = {
   plusDI: 20,
   minusDI: 20,
@@ -35,7 +33,6 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   const signal = await req.json();
 
-  // Ambil config terbaru dari Supabase
   const { data: configs, error: configError } = await supabase
     .from("StrategyConfig")
     .select("*")
@@ -98,12 +95,21 @@ export async function POST(req: NextRequest) {
       message: "Order saved successfully.",
       order: savedOrder,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
+    // Safe type guard for error object
+    if (err instanceof Error) {
+      return NextResponse.json(
+        {
+          error: err.message,
+        },
+        { status: 500 }
+      );
+    }
+
+    // Fallback if not instance of Error
     return NextResponse.json(
       {
-        error: err.message || "Unknown error",
-        detail: err.detail,
-        full: err.full,
+        error: "Unknown error occurred.",
       },
       { status: 500 }
     );
