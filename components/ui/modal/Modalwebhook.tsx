@@ -22,11 +22,11 @@ export default function BasicModal() {
   const handleClose = () => setOpen(false);
 
   const [form, setForm] = React.useState({
-    symbol: "",
-    plusDI: 0,
-    minusDI: 0,
-    adx: 0,
-    timeframe: "",
+    symbol: "BTCUSDT",
+    plusDI: 27.5,
+    minusDI: 15.0,
+    adx: 25.0,
+    timeframe: "5m",
   });
 
   const handleChange = (

@@ -28,14 +28,14 @@ export default function BasicModal() {
   const handleClose = () => setOpen(false);
 
   const [form, setForm] = React.useState({
-    symbol: "",
-    timeframe: "",
-    plusDI: 0,
-    minusDI: 0,
-    adx: 0,
-    takeProfit: 0,
-    stopLoss: 0,
-    leverage: "",
+    symbol: "BTCUSDT",
+    timeframe: "5m",
+    plusDI: 25,
+    minusDI: 20,
+    adx: 20,
+    takeProfit:2,
+    stopLoss: 2,
+    leverage: "10x",
   });
 
   const handleChange = (
